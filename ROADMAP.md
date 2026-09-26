@@ -1,12 +1,12 @@
-# BayesianDiffEq.jl — 12-month roadmap
+# BayesianDiffEq.jl - 12-month roadmap
 
 This roadmap is organized into four phases, each with concrete
 deliverables and a definition of done. Weekly progress is reported
 against this document.
 
-## Phase 1 — ODE workflow end to end (months 1–2)
+## Phase 1 - ODE workflow end to end (months 1 - 2)
 
-**Goal:** the package runs the full workflow on realistic ODE problems —
+**Goal:** the package runs the full workflow on realistic ODE problems -
 count data, partial observation, unknown initial conditions, no
 divergent transitions.
 
@@ -24,7 +24,7 @@ divergent transitions.
 Windows) with zero divergent transitions and posterior means within one
 posterior standard deviation of the ground truth.
 
-## Phase 2 — SDE pseudo-likelihood studies (months 3–5)
+## Phase 2 - SDE pseudo-likelihood studies (months 3 - 5)
 
 **Goal:** the package is a working testbed for the question of whether
 pseudo-likelihood SDE estimates are biased relative to optimization-based
@@ -42,7 +42,7 @@ estimates.
 **Definition of done:** a reproducible script that regenerates every
 figure and number in the SDE bias study from a single entry point.
 
-## Phase 3 — Hierarchical models and real data (months 6–8)
+## Phase 3 - Hierarchical models and real data (months 6 - 8)
 
 **Goal:** the package handles population-level inference on real datasets.
 
@@ -55,7 +55,7 @@ figure and number in the SDE bias study from a single entry point.
 **Definition of done:** a hierarchical analysis of at least one real
 dataset whose results are consistent with published estimates.
 
-## Phase 4 — Legitimacy (months 9–12)
+## Phase 4 - Legitimacy (months 9 - 12)
 
 **Goal:** the package is a citable, trusted piece of the ecosystem.
 
