@@ -1,4 +1,11 @@
 # BayesianDiffEq.jl
+[![CI](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/CI.yml)
+[![Documentation](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/Documentation.yml/badge.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/Documentation.yml)
+[![Format check](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/FormatCheck.yml/badge.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/FormatCheck.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docs](https://img.shields.io/badge/docs-live-blue.svg)](https://arpanc6.github.io/BayesianDiffEq.jl/dev/)
+[![Release](https://img.shields.io/badge/release-v0.1.0-blue.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/releases/tag/v0.1.0)
+
 
 Modern, well-tested Bayesian parameter estimation for
 [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl)
@@ -80,11 +87,31 @@ See `examples/` for complete, heavily commented analyses:
 
 Bayesian inference for discretely observed SDEs is an active research
 problem. This package provides the ingredients for a rigorous comparison
-of pseudo-likelihood and optimization-based approaches — the
+of pseudo-likelihood and optimization-based approaches - the
 Euler-Maruyama pseudo-likelihood, truncated Brownian expansions, and
-side-by-side bias and coverage studies — so that the question of when
+side-by-side bias and coverage studies - so that the question of when
 pseudo-likelihood estimates are biased can be answered reproducibly. The
 experimental design is in `benchmarks/sde_bias_study.md`.
+
+### Key finding (10 trials, stochastic Lotka-Volterra SDE)
+
+| Parameter | True | Bayesian bias | MLE bias |
+|-----------|------|---------------|----------|
+| a | 1.5 | 0.2053 | **0.0302** |
+| b | 1.0 | 0.0764 | **0.0333** |
+| c | 3.0 | -0.2923 | **-0.137** |
+| d | 1.0 | 0.0663 | **0.0046** |
+| sigma | 0.1 | 0.1825 | **0.073** |
+
+MLE consistently recovers parameters more accurately than Bayesian
+pseudo-likelihood. Bayesian bias is 2-6x larger across all parameters.
+Full results: `benchmarks/RESULTS.md`.
+
+## Documentation
+
+Full documentation is available at:
+
+**https://arpanc6.github.io/BayesianDiffEq.jl/dev/**
 
 ## Related packages
 
@@ -99,10 +126,10 @@ experimental design is in `benchmarks/sde_bias_study.md`.
 ## Roadmap
 
 The twelve-month development plan is in [ROADMAP.md](ROADMAP.md). Phase 1
-(months 1–2) delivers the ODE workflow end to end; Phase 2 (months 3–5)
+(months 1 - 2) delivers the ODE workflow end to end; Phase 2 (months 3 - 5)
 delivers the SDE pseudo-likelihood comparison studies; Phase 3 (months
-6–8) delivers hierarchical models and real-data benchmarks; Phase 4
-(months 9–12) delivers the JuliaCon/JOSS paper.
+6 - 8) delivers hierarchical models and real-data benchmarks; Phase 4
+(months 9 - 12) delivers the JuliaCon/JOSS paper.
 
 ## Contributing
 
