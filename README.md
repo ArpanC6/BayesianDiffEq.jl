@@ -118,7 +118,7 @@ Full documentation is available at:
 - [DiffEqBayes.jl](https://github.com/SciML/DiffEqBayes.jl): the legacy
   interface, whose `turing_inference` workflow this package supersedes.
 - [DiffEqParamEstim.jl](https://github.com/SciML/DiffEqParamEstim.jl):
-  optimization-based parameter estimation; used here as the comparison
+  optimization-based parameter estimation, used here as the comparison
   baseline.
 - [Turing.jl](https://github.com/TuringLang/Turing.jl): the probabilistic
   programming language this package is built on.
@@ -126,8 +126,8 @@ Full documentation is available at:
 ## Roadmap
 
 The twelve-month development plan is in [ROADMAP.md](ROADMAP.md). Phase 1
-(months 1 - 2) delivers the ODE workflow end to end; Phase 2 (months 3 - 5)
-delivers the SDE pseudo-likelihood comparison studies; Phase 3 (months
+(months 1 - 2) delivers the ODE workflow end to end, Phase 2 (months 3 - 5)
+delivers the SDE pseudo-likelihood comparison studies, Phase 3 (months
 6 - 8) delivers hierarchical models and real-data benchmarks; Phase 4
 (months 9 - 12) delivers the JuliaCon/JOSS paper.
 
