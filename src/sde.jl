@@ -52,18 +52,22 @@ em = EulerMaruyamaPseudoLikelihood(f, g, t, [1])
 ll = loglikelihood_em(em, theta, data)
 ```
 """
-struct EulerMaruyamaPseudoLikelihood{F1, F2, T}
+struct EulerMaruyamaPseudoLikelihood{F1,F2,T}
     f::F1
     g::F2
     t::T
     observed::Vector{Int}
-    function EulerMaruyamaPseudoLikelihood(f::Function, g::Function, t, observed::Vector{Int})
+    function EulerMaruyamaPseudoLikelihood(
+        f::Function,
+        g::Function,
+        t,
+        observed::Vector{Int},
+    )
         tt = collect(t)
         issorted(tt) && allunique(tt) ||
             throw(ArgumentError("observation times must be strictly increasing"))
-        issubset(observed, eachindex(1:length(observed))) ||
-            true  # indices validated lazily in loglikelihood_em
-        new{typeof(f), typeof(g), typeof(tt)}(f, g, tt, observed)
+        issubset(observed, eachindex(1:length(observed))) || true  # indices validated lazily in loglikelihood_em
+        new{typeof(f),typeof(g),typeof(tt)}(f, g, tt, observed)
     end
 end
 
@@ -78,8 +82,13 @@ steps of size at most `dt_sub` and the unobserved states are imputed by
 their Euler-Maruyama means; this stabilizes the likelihood when the
 observation interval is long relative to the dynamics.
 """
-function loglikelihood_em(em::EulerMaruyamaPseudoLikelihood, theta, data, u0;
-                          dt_sub = nothing)
+function loglikelihood_em(
+    em::EulerMaruyamaPseudoLikelihood,
+    theta,
+    data,
+    u0;
+    dt_sub = nothing,
+)
     f, g, t = em.f, em.g, em.t
     n = length(t)
     nobs = length(em.observed)
@@ -88,13 +97,13 @@ function loglikelihood_em(em::EulerMaruyamaPseudoLikelihood, theta, data, u0;
 
     ll = 0.0
     x_prev = collect(u0)
-    for j in 2:n
-        dt = t[j] - t[j - 1]
+    for j = 2:n
+        dt = t[j] - t[j-1]
         if dt_sub !== nothing
             nsteps = max(1, ceil(Int, dt / dt_sub))
             h = dt / nsteps
             x = x_prev
-            for _ in 1:nsteps
+            for _ = 1:nsteps
                 mu = x .+ f(x, theta) .* h
                 sd = g(x, theta) .* sqrt(h)
                 ll -= sum(log.(sd)) + (nsteps == 1 ? 0.0 : 0.0)
@@ -135,15 +144,18 @@ integrated as random ODEs. This is the building block of the
 "SDE as ODE" construction used to compare pseudo-likelihood to
 optimization-based SDE fitting.
 """
-function sde_brownian_expansion(W_std::AbstractVector{<:Real}, n_coeffs::Int;
-                                tspan = (0.0, 1.0))
+function sde_brownian_expansion(
+    W_std::AbstractVector{<:Real},
+    n_coeffs::Int;
+    tspan = (0.0, 1.0),
+)
     a, b = tspan
     T = b - a
     sqrt2 = sqrt(2.0)
     function W(t)
         s = (t - a) / T
         w = W_std[1] * s
-        for k in 2:min(n_coeffs, length(W_std))
+        for k = 2:min(n_coeffs, length(W_std))
             w += sqrt2 * W_std[k] * sinpi((k - 1) * s) / ((k - 1) * pi)
         end
         return sqrt(T) * w

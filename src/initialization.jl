@@ -24,12 +24,17 @@ init = map_initialization(model)
 chain = sample(model, NUTS(), 500; init_params = init)
 ```
 """
-function map_initialization(model; maxiters::Int = 2000, fallback::NamedTuple = NamedTuple())
+function map_initialization(
+    model;
+    maxiters::Int = 2000,
+    fallback::NamedTuple = NamedTuple(),
+)
     try
         res = maximum_a_posteriori(model; maxiters = maxiters)
         return res.values
     catch err
-        @warn "MAP optimization failed; falling back to default initialization." exception = err
+        @warn "MAP optimization failed; falling back to default initialization." exception =
+            err
         return fallback
     end
 end

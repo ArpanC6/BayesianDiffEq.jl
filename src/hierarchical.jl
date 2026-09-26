@@ -30,17 +30,30 @@ population scale `tau`.
 A `DynamicPPL.Model` whose parameters include `mu`, `tau`, per-subject
 `theta_j` and `sigma_j`, and (optionally) initial conditions.
 """
-function hierarchical_model(prob, t, data_all; theta_priors::Vector{<:Distribution},
-                            u0_priors = nothing, likelihood::Symbol = :gaussian,
-                            sigma_prior::Distribution = truncated(Normal(0, 1); lower = 1e-4),
-                            scale::Real = 1.0)
+function hierarchical_model(
+    prob,
+    t,
+    data_all;
+    theta_priors::Vector{<:Distribution},
+    u0_priors = nothing,
+    likelihood::Symbol = :gaussian,
+    sigma_prior::Distribution = truncated(Normal(0, 1); lower = 1e-4),
+    scale::Real = 1.0,
+)
     J = length(data_all)
     spec = ObservationSpec(likelihood, Int[], scale)
     return _hier_fit(prob, t, data_all, theta_priors, sigma_prior, spec, u0_priors)
 end
 
-@model function _hier_fit(prob, t, data_all, theta_priors, sigma_prior,
-                          spec::ObservationSpec, u0_priors)
+@model function _hier_fit(
+    prob,
+    t,
+    data_all,
+    theta_priors,
+    sigma_prior,
+    spec::ObservationSpec,
+    u0_priors,
+)
     J = length(data_all)
     K = length(theta_priors)
 
@@ -49,7 +62,7 @@ end
     tau = exp.(log_tau)
 
     z ~ filldist(Normal(0.0, 1.0), K, J)
-    for j in 1:J
+    for j = 1:J
         theta = mu .+ tau .* z[:, j]
         sigma ~ sigma_prior
         if u0_priors !== nothing
@@ -58,11 +71,17 @@ end
         else
             prob_j = remake(prob; p = theta)
         end
-        sol = solve(prob_j, Tsit5(); saveat = t, save_idxs = spec.observed,
-                    abstol = 1e-8, reltol = 1e-6)
+        sol = solve(
+            prob_j,
+            Tsit5();
+            saveat = t,
+            save_idxs = spec.observed,
+            abstol = 1e-8,
+            reltol = 1e-6,
+        )
         if !SciMLBase.successful_retcode(sol)
-            data_all[j][1][1] ~ (spec.likelihood == :gaussian ?
-                                 Normal(-1e9, 1e-9) : Poisson(1e-9))
+            data_all[j][1][1] ~
+            (spec.likelihood == :gaussian ? Normal(-1e9, 1e-9) : Poisson(1e-9))
             continue
         end
         for k in eachindex(t)

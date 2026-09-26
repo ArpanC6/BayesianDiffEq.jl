@@ -44,10 +44,14 @@ theta_priors = [
     truncated(Normal(1.5, 1.0); lower = 0.01),
 ]
 
-model = bayesian_model(prob, t_obs, data;
-                       theta_priors = theta_priors,
-                       likelihood = :poisson,
-                       scale = observation_scale)
+model = bayesian_model(
+    prob,
+    t_obs,
+    data;
+    theta_priors = theta_priors,
+    likelihood = :poisson,
+    scale = observation_scale,
+)
 
 # --- MAP initialization (this is what removes the divergences) -----------
 init = map_initialization(model)
@@ -61,11 +65,14 @@ println("Posterior std:    ", vec(std(Array(chain); dims = 1)))
 theta_draws = Matrix(Array(chain)')    # 4 x n_samples
 sims = posterior_predictive(prob, t_obs, theta_draws)
 
-plt = plot(title = "Posterior predictive: Lotka-Volterra, Poisson data",
-           xlabel = "t", ylabel = "population (scaled)")
+plt = plot(
+    title = "Posterior predictive: Lotka-Volterra, Poisson data",
+    xlabel = "t",
+    ylabel = "population (scaled)",
+)
 plot!(plt, t_obs, reduce(hcat, sol_true.u)' ./ 1; label = "truth", lw = 2)
 for s in sims[1:20:end]
-    plot!(plt, t_obs, reduce(hcat, s.u)' ; label = "", alpha = 0.15, color = :grey)
+    plot!(plt, t_obs, reduce(hcat, s.u)'; label = "", alpha = 0.15, color = :grey)
 end
 savefig(plt, "posterior_predictive_lv.png")
 println("Saved posterior_predictive_lv.png")

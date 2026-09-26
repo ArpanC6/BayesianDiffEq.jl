@@ -30,13 +30,13 @@ end
 n_trials = 10
 results = []
 
-for trial in 1:n_trials
+for trial = 1:n_trials
     p_true = [1.5, 1.0, 3.0, 1.0, 0.1]
     u0 = [1.0, 1.0]
     tspan = (0.0, 10.0)
 
     prob = SDEProblem(lotka_volterra!, lv_noise!, u0, tspan, p_true)
-    sol = solve(prob, SRIW1(); saveat=0.5, seed=trial)
+    sol = solve(prob, SRIW1(); saveat = 0.5, seed = trial)
 
     t_data = sol.t
     data = Array(sol)
@@ -49,25 +49,30 @@ for trial in 1:n_trials
         sigma ~ truncated(Normal(0.1, 0.05), 0.01, 0.5)
 
         p = [a, b, c, d, sigma]
-        _prob = remake(prob; p=p)
-        _sol = solve(_prob, SRIW1(); saveat=t)
+        _prob = remake(prob; p = p)
+        _sol = solve(_prob, SRIW1(); saveat = t)
 
-        for i in 1:length(t)
+        for i = 1:length(t)
             data[:, i] ~ MvNormal(_sol[:, i], sigma^2 * I)
         end
     end
 
     model = fit_lv_sde(data, t_data, prob)
-    chain = sample(model, NUTS(0.85), 500; progress=false)
+    chain = sample(model, NUTS(0.85), 500; progress = false)
 
-    bayes_est = [mean(chain[:a]), mean(chain[:b]),
-                 mean(chain[:c]), mean(chain[:d]), mean(chain[:sigma])]
+    bayes_est = [
+        mean(chain[:a]),
+        mean(chain[:b]),
+        mean(chain[:c]),
+        mean(chain[:d]),
+        mean(chain[:sigma]),
+    ]
 
     function neg_log_likelihood(p, _)
-        _prob = remake(prob; p=p)
-        _sol = solve(_prob, SRIW1(); saveat=t_data)
+        _prob = remake(prob; p = p)
+        _sol = solve(_prob, SRIW1(); saveat = t_data)
         ll = 0.0
-        for i in 1:length(t_data)
+        for i = 1:length(t_data)
             ll += logpdf(MvNormal(_sol[:, i], p[5]^2 * I), data[:, i])
         end
         return -ll
@@ -87,9 +92,9 @@ println()
 
 for (trial, p_true, bayes_est, mle_est) in results
     println("Trial $trial:")
-    println("  True:      ", round.(p_true, digits=3))
-    println("  Bayesian:  ", round.(bayes_est, digits=3))
-    println("  MLE:       ", round.(mle_est, digits=3))
+    println("  True:      ", round.(p_true, digits = 3))
+    println("  Bayesian:  ", round.(bayes_est, digits = 3))
+    println("  MLE:       ", round.(mle_est, digits = 3))
 end
 
 bayes_bias = mean([b - t for (_, t, b, _) in results])
@@ -97,5 +102,5 @@ mle_bias = mean([m - t for (_, t, _, m) in results])
 
 println()
 println("Mean bias:")
-println("  Bayesian:  ", round.(bayes_bias, digits=4))
-println("  MLE:       ", round.(mle_bias, digits=4))
+println("  Bayesian:  ", round.(bayes_bias, digits = 4))
+println("  MLE:       ", round.(mle_bias, digits = 4))

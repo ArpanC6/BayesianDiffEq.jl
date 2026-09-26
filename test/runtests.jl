@@ -18,8 +18,12 @@ Random.seed!(1234)
         prob = ODEProblem(f, [1.0], (0.0, 2.0), [0.5])
         t = [0.0, 1.0, 2.0]
         data = [[1.0], [1.6], [2.7]]
-        m = bayesian_model(prob, t, data;
-                           theta_priors = [truncated(Normal(1.0, 1.0); lower = 0.01)])
+        m = bayesian_model(
+            prob,
+            t,
+            data;
+            theta_priors = [truncated(Normal(1.0, 1.0); lower = 0.01)],
+        )
         @test m isa DynamicPPL.Model
     end
 
@@ -34,7 +38,7 @@ Random.seed!(1234)
     end
 
     @testset "coverage utility" begin
-        runs = [( [1.0], randn(1, 200) .+ 1.0 ) for _ in 1:20]
+        runs = [([1.0], randn(1, 200) .+ 1.0) for _ = 1:20]
         cov = coverage_of_credible_intervals(runs; alpha = 0.9)
         @test 0.7 < cov <= 1.0
     end
@@ -55,8 +59,12 @@ Random.seed!(1234)
             t = collect(0.0:0.5:5.0)
             sol = solve(prob, Tsit5(); saveat = t)
             data = [u .+ 0.03 .* randn(1) for u in sol.u]
-            m = bayesian_model(prob, t, data;
-                               theta_priors = [truncated(Normal(1.0, 0.8); lower = 0.01)])
+            m = bayesian_model(
+                prob,
+                t,
+                data;
+                theta_priors = [truncated(Normal(1.0, 0.8); lower = 0.01)],
+            )
             init = map_initialization(m)
             chain = sample(m, NUTS(), 300; init_params = init, progress = false)
             post_mean = mean(Array(chain[:, :theta[1], :]))

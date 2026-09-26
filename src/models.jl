@@ -27,8 +27,9 @@ struct ObservationSpec
     observed::Vector{Int}
     scale::Float64
     function ObservationSpec(likelihood::Symbol, observed::Vector{Int}, scale::Real)
-        likelihood in (:gaussian, :poisson) ||
-            throw(ArgumentError("likelihood must be :gaussian or :poisson, got $(likelihood)"))
+        likelihood in (:gaussian, :poisson) || throw(
+            ArgumentError("likelihood must be :gaussian or :poisson, got $(likelihood)"),
+        )
         scale > 0 || throw(ArgumentError("scale must be positive"))
         new(likelihood, observed, Float64(scale))
     end
@@ -60,14 +61,17 @@ SciML problem `prob` from observations `data` at times `t`.
 # Returns
 A `DynamicPPL.Model` ready for `sample` or `maximum_a_posteriori`.
 """
-function bayesian_model(prob::SciMLBase.AbstractDEProblem, t, data;
-                        theta_priors::Vector{<:Distribution},
-                        likelihood::Symbol = :gaussian,
-                        sigma_prior::Distribution = truncated(Normal(0, 1); lower = 1e-4),
-                        u0_priors = nothing,
-                        scale::Real = 1.0)
-    u0_priors !== nothing &&
-        length(u0_priors) == length(prob.u0) ||
+function bayesian_model(
+    prob::SciMLBase.AbstractDEProblem,
+    t,
+    data;
+    theta_priors::Vector{<:Distribution},
+    likelihood::Symbol = :gaussian,
+    sigma_prior::Distribution = truncated(Normal(0, 1); lower = 1e-4),
+    u0_priors = nothing,
+    scale::Real = 1.0,
+)
+    u0_priors !== nothing && length(u0_priors) == length(prob.u0) ||
         u0_priors === nothing ||
         throw(ArgumentError("u0_priors must have one distribution per state"))
     length(theta_priors) == length(prob.p) ||
@@ -91,7 +95,15 @@ function _default_solver(prob)
     return prob isa SciMLBase.AbstractSDEProblem ? SOSRI() : Tsit5()
 end
 
-@model function _fit_de(prob, t, data, theta_priors, sigma_prior, spec::ObservationSpec, u0_priors)
+@model function _fit_de(
+    prob,
+    t,
+    data,
+    theta_priors,
+    sigma_prior,
+    spec::ObservationSpec,
+    u0_priors,
+)
     theta ~ product_distribution(theta_priors)
     sigma ~ sigma_prior
     if u0_priors !== nothing
@@ -101,8 +113,14 @@ end
         prob = remake(prob; p = theta)
     end
 
-    sol = solve(prob, _default_solver(prob); saveat = t, save_idxs = spec.observed,
-                abstol = 1e-8, reltol = 1e-6)
+    sol = solve(
+        prob,
+        _default_solver(prob);
+        saveat = t,
+        save_idxs = spec.observed,
+        abstol = 1e-8,
+        reltol = 1e-6,
+    )
     if !SciMLBase.successful_retcode(sol)
         # Integrator failure: reject by returning -Inf density contribution.
         # We do this by observing an impossible value with the current likelihood.

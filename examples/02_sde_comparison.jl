@@ -39,7 +39,7 @@ tspan = (0.0, 10.0)
 p_true = [1.5, 1.0, 3.0, 1.0, 0.1]
 
 prob = SDEProblem(lv_drift!, lv_diffusion!, u0, tspan, p_true)
-sol = solve(prob, SRIW1(); saveat=0.5)
+sol = solve(prob, SRIW1(); saveat = 0.5)
 
 t_data = sol.t
 data = Array(sol)
@@ -56,32 +56,32 @@ println("Data generated with parameters: ", p_true)
     sigma ~ truncated(Normal(0.1, 0.05), 0.01, 0.5)
 
     p = [a, b, c, d, sigma]
-    _prob = remake(prob; p=p)
-    _sol = solve(_prob, SRIW1(); saveat=t)
+    _prob = remake(prob; p = p)
+    _sol = solve(_prob, SRIW1(); saveat = t)
 
-    for i in 1:length(t)
+    for i = 1:length(t)
         data[:, i] ~ MvNormal(_sol[:, i], sigma^2 * I)
     end
 end
 
 model = fit_lv_sde(data, t_data, prob)
-chain = sample(model, NUTS(0.85), 1000; progress=false)
+chain = sample(model, NUTS(0.85), 1000; progress = false)
 
 println()
 println("Bayesian posterior mean:")
-println("  a     = ", round(mean(chain[:a]), digits=4))
-println("  b     = ", round(mean(chain[:b]), digits=4))
-println("  c     = ", round(mean(chain[:c]), digits=4))
-println("  d     = ", round(mean(chain[:d]), digits=4))
-println("  sigma = ", round(mean(chain[:sigma]), digits=4))
+println("  a     = ", round(mean(chain[:a]), digits = 4))
+println("  b     = ", round(mean(chain[:b]), digits = 4))
+println("  c     = ", round(mean(chain[:c]), digits = 4))
+println("  d     = ", round(mean(chain[:d]), digits = 4))
+println("  sigma = ", round(mean(chain[:sigma]), digits = 4))
 
 # Optimization-based MLE
 
 function neg_log_likelihood(p, _)
-    _prob = remake(prob; p=p)
-    _sol = solve(_prob, SRIW1(); saveat=t_data)
+    _prob = remake(prob; p = p)
+    _sol = solve(_prob, SRIW1(); saveat = t_data)
     ll = 0.0
-    for i in 1:length(t_data)
+    for i = 1:length(t_data)
         ll += logpdf(MvNormal(_sol[:, i], p[5]^2 * I), data[:, i])
     end
     return -ll
@@ -92,18 +92,28 @@ opt_result = solve(opt_prob, NelderMead())
 
 println()
 println("MLE estimate:")
-println("  a     = ", round(opt_result.u[1], digits=4))
-println("  b     = ", round(opt_result.u[2], digits=4))
-println("  c     = ", round(opt_result.u[3], digits=4))
-println("  d     = ", round(opt_result.u[4], digits=4))
-println("  sigma = ", round(opt_result.u[5], digits=4))
+println("  a     = ", round(opt_result.u[1], digits = 4))
+println("  b     = ", round(opt_result.u[2], digits = 4))
+println("  c     = ", round(opt_result.u[3], digits = 4))
+println("  d     = ", round(opt_result.u[4], digits = 4))
+println("  sigma = ", round(opt_result.u[5], digits = 4))
 
 # Comparison
 
 println()
 println("Comparison:")
 println("  True parameters:     ", p_true)
-println("  Bayesian posterior:  ", round.([mean(chain[:a]), mean(chain[:b]), 
-                                          mean(chain[:c]), mean(chain[:d]), 
-                                          mean(chain[:sigma])], digits=4))
-println("  MLE estimate:        ", round.(opt_result.u, digits=4))
+println(
+    "  Bayesian posterior:  ",
+    round.(
+        [
+            mean(chain[:a]),
+            mean(chain[:b]),
+            mean(chain[:c]),
+            mean(chain[:d]),
+            mean(chain[:sigma]),
+        ],
+        digits = 4,
+    ),
+)
+println("  MLE estimate:        ", round.(opt_result.u, digits = 4))

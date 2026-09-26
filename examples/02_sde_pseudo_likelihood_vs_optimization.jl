@@ -20,8 +20,7 @@ Random.seed!(7)
 # --- Stochastic Lotka-Volterra -------------------------------------------
 function f_lv(x, p)
     alpha, beta, gamma, delta, sigma = p
-    return [alpha * x[1] - beta * x[1] * x[2],
-            -gamma * x[2] + delta * x[1] * x[2]]
+    return [alpha * x[1] - beta * x[1] * x[2], -gamma * x[2] + delta * x[1] * x[2]]
 end
 function g_lv(x, p)
     sigma = p[5]

@@ -29,7 +29,7 @@ n_subjects = 8
 
 data_all = []
 theta_true_all = []
-for j in 1:n_subjects
+for j = 1:n_subjects
     theta_j = max.(mu_true .+ tau_true .* randn(2), 0.05)
     push!(theta_true_all, theta_j)
     prob_j = ODEProblem(pk_ode!, [1.0, 0.0], (0.0, 12.0), theta_j)
@@ -38,13 +38,16 @@ for j in 1:n_subjects
     push!(data_all, [u .+ sigma .* randn(2) for u in sol_j.u])
 end
 
-theta_priors = [truncated(Normal(1.5, 1.0); lower = 0.01),
-                truncated(Normal(0.5, 0.5); lower = 0.01)]
-model = hierarchical_model(ODEProblem(pk_ode!, [1.0, 0.0], (0.0, 12.0), [1.0, 1.0]),
-                           t_obs, data_all;
-                           theta_priors = theta_priors,
-                           likelihood = :gaussian,
-                           sigma_prior = truncated(Normal(0, 0.2); lower = 1e-4))
+theta_priors =
+    [truncated(Normal(1.5, 1.0); lower = 0.01), truncated(Normal(0.5, 0.5); lower = 0.01)]
+model = hierarchical_model(
+    ODEProblem(pk_ode!, [1.0, 0.0], (0.0, 12.0), [1.0, 1.0]),
+    t_obs,
+    data_all;
+    theta_priors = theta_priors,
+    likelihood = :gaussian,
+    sigma_prior = truncated(Normal(0, 0.2); lower = 1e-4),
+)
 
 init = map_initialization(model)
 chain = sample(model, NUTS(), 500; init_params = init, progress = false)
