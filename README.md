@@ -80,9 +80,9 @@ See `examples/` for complete, heavily commented analyses:
 
 Bayesian inference for discretely observed SDEs is an active research
 problem. This package provides the ingredients for a rigorous comparison
-of pseudo-likelihood and optimization-based approaches — the
+of pseudo-likelihood and optimization-based approaches - the
 Euler-Maruyama pseudo-likelihood, truncated Brownian expansions, and
-side-by-side bias and coverage studies — so that the question of when
+side-by-side bias and coverage studies - so that the question of when
 pseudo-likelihood estimates are biased can be answered reproducibly. The
 experimental design is in `benchmarks/sde_bias_study.md`.
 
