@@ -118,7 +118,7 @@ Full documentation is available at:
 - [DiffEqBayes.jl](https://github.com/SciML/DiffEqBayes.jl): the legacy
   interface, whose `turing_inference` workflow this package supersedes.
 - [DiffEqParamEstim.jl](https://github.com/SciML/DiffEqParamEstim.jl):
-  optimization-based parameter estimation; used here as the comparison
+  optimization-based parameter estimation, used here as the comparison
   baseline.
 - [Turing.jl](https://github.com/TuringLang/Turing.jl): the probabilistic
   programming language this package is built on.
