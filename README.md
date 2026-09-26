@@ -93,19 +93,32 @@ side-by-side bias and coverage studies - so that the question of when
 pseudo-likelihood estimates are biased can be answered reproducibly. The
 experimental design is in `benchmarks/sde_bias_study.md`.
 
-### Key finding (10 trials, stochastic Lotka-Volterra SDE)
+### Preliminary result (10 trials, exploratory)
+
+> **Status:** exploratory — see `benchmarks/RESULTS.md` for the full 
+> protocol. Scaling to 100 replicates is in progress.
+
+Preliminary evidence suggests that the Euler-Maruyama pseudo-likelihood
+**overestimates the diffusion coefficient** under coarse observation:
 
 | Parameter | True | Bayesian bias | MLE bias |
 |-----------|------|---------------|----------|
-| a | 1.5 | 0.2053 | **0.0302** |
-| b | 1.0 | 0.0764 | **0.0333** |
-| c | 3.0 | -0.2923 | **-0.137** |
-| d | 1.0 | 0.0663 | **0.0046** |
-| sigma | 0.1 | 0.1825 | **0.073** |
+| a | 1.5 | 0.2053 | 0.0302 |
+| b | 1.0 | 0.0764 | 0.0333 |
+| c | 3.0 | -0.2923 | -0.137 |
+| d | 1.0 | 0.0663 | 0.0046 |
+| **sigma_sde** | **0.1** | **+0.1825** | **+0.073** |
 
-MLE consistently recovers parameters more accurately than Bayesian
-pseudo-likelihood. Bayesian bias is 2-6x larger across all parameters.
-Full results: `benchmarks/RESULTS.md`.
+The `sigma_sde` result (true 0.1, Bayesian estimate ≈ 0.28) is a 
+**~2.8x overestimate of the diffusion coefficient**, consistent with 
+discretization bias in the pseudo-likelihood rather than a property 
+of Bayesian inference itself.
+
+**Planned next steps:**
+- Full 100-replicate protocol with standard errors
+- Coverage analysis of posterior credible intervals
+- Observation-interval ablation (dt → 0)
+- Higher-order pseudo-likelihoods (Milstein)
 
 ## Documentation
 
