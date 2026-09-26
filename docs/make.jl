@@ -16,4 +16,9 @@ makedocs(;
     ]
 )
 
-deploydocs(; repo = "github.com/ArpanC6/BayesianDiffEq.jl", devbranch = "main")
+deploydocs(;
+    repo = "github.com/ArpanC6/BayesianDiffEq.jl",
+    devbranch = "main",
+    push_preview = false,
+    forcepush = true,
+)
