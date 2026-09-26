@@ -1,0 +1,37 @@
+name = "BayesianDiffEq"
+uuid = "8f5b7a1c-4e2a-4f3b-9c8d-5b6a7d8e9f01"
+authors = ["Arpan Chakraborty <chakrabortyarpan151@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Optimization = "7f7a1694-90dd-40f0-9382-eb1efda571ba"
+OptimizationOptimJL = "36348300-93cb-4f02-beb5-3c3902f8871e"
+OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+SciMLBase = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+StochasticDiffEq = "789caeaf-c7a9-5a7d-9973-96adeb23e2a0"
+Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
+
+[compat]
+Distributions = "0.25"
+LinearAlgebra = "1"
+Optimization = "4"
+OptimizationOptimJL = "0.4"
+OrdinaryDiffEq = "6"
+Random = "1"
+Reexport = "1"
+SciMLBase = "2"
+StatsBase = "0.34"
+StochasticDiffEq = "6"
+Turing = "0.35"
+julia = "1.10, 1.11, 1.12"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

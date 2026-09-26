@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: BayesianDiffEq.jl
+abstract: >-
+  Modern Bayesian parameter estimation for DifferentialEquations.jl
+  models, built on Turing.jl, with realistic observation models,
+  hierarchical structure, and posterior validation.
+authors:
+  - family-names: Chakraborty
+    given-names: Arpan
+repository-code: "https://github.com/ArpanC6/BayesianDiffEq.jl"
+license: MIT
+version: 0.1.0
