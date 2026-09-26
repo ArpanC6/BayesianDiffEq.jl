@@ -1,5 +1,4 @@
 [deps]
-BayesianDiffEq = "8f5b7a1c-4e2a-4f3b-9c8d-5b6a7d8e9f01"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 
 [compat]
