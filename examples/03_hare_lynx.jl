@@ -107,7 +107,7 @@ hare = [
     228.0,
     168.0,
     79.0,
-    32.0,
+    32.0
 ]
 
 lynx = [
@@ -201,7 +201,7 @@ lynx = [
     150.0,
     115.0,
     78.0,
-    45.0,
+    45.0
 ]
 
 t_data = collect(1.0:length(hare))
@@ -231,7 +231,7 @@ prob = ODEProblem(lv!, u0, tspan)
     _prob = remake(prob; p = p)
     _sol = solve(_prob, Tsit5(); saveat = t_data)
 
-    for i = 1:length(t_data)
+    for i in 1:length(t_data)
         hare[i] ~ Normal(_sol[1, i], σ)
         lynx[i] ~ Normal(_sol[2, i], σ)
     end

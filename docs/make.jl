@@ -12,8 +12,8 @@ makedocs(;
         "SDE pseudo-likelihood" => "sde.md",
         "Hierarchical models" => "hierarchical.md",
         "Validation" => "validation.md",
-        "API reference" => "api.md",
-    ],
+        "API reference" => "api.md"
+    ]
 )
 
 deploydocs(; repo = "github.com/ArpanC6/BayesianDiffEq.jl", devbranch = "main")

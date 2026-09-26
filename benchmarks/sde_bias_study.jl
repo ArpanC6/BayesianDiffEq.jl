@@ -30,7 +30,7 @@ end
 n_trials = 10
 results = []
 
-for trial = 1:n_trials
+for trial in 1:n_trials
     p_true = [1.5, 1.0, 3.0, 1.0, 0.1]
     u0 = [1.0, 1.0]
     tspan = (0.0, 10.0)
@@ -52,7 +52,7 @@ for trial = 1:n_trials
         _prob = remake(prob; p = p)
         _sol = solve(_prob, SRIW1(); saveat = t)
 
-        for i = 1:length(t)
+        for i in 1:length(t)
             data[:, i] ~ MvNormal(_sol[:, i], sigma^2 * I)
         end
     end
@@ -65,14 +65,14 @@ for trial = 1:n_trials
         mean(chain[:b]),
         mean(chain[:c]),
         mean(chain[:d]),
-        mean(chain[:sigma]),
+        mean(chain[:sigma])
     ]
 
     function neg_log_likelihood(p, _)
         _prob = remake(prob; p = p)
         _sol = solve(_prob, SRIW1(); saveat = t_data)
         ll = 0.0
-        for i = 1:length(t_data)
+        for i in 1:length(t_data)
             ll += logpdf(MvNormal(_sol[:, i], p[5]^2 * I), data[:, i])
         end
         return -ll

@@ -41,7 +41,7 @@ theta_priors = [
     truncated(Normal(2.0, 1.0); lower = 0.01),
     truncated(Normal(1.5, 1.0); lower = 0.01),
     truncated(Normal(3.5, 1.5); lower = 0.01),
-    truncated(Normal(1.5, 1.0); lower = 0.01),
+    truncated(Normal(1.5, 1.0); lower = 0.01)
 ]
 
 model = bayesian_model(
@@ -50,7 +50,7 @@ model = bayesian_model(
     data;
     theta_priors = theta_priors,
     likelihood = :poisson,
-    scale = observation_scale,
+    scale = observation_scale
 )
 
 # --- MAP initialization (this is what removes the divergences) -----------
@@ -68,7 +68,7 @@ sims = posterior_predictive(prob, t_obs, theta_draws)
 plt = plot(
     title = "Posterior predictive: Lotka-Volterra, Poisson data",
     xlabel = "t",
-    ylabel = "population (scaled)",
+    ylabel = "population (scaled)"
 )
 plot!(plt, t_obs, reduce(hcat, sol_true.u)' ./ 1; label = "truth", lw = 2)
 for s in sims[1:20:end]

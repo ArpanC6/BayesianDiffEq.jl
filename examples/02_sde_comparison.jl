@@ -59,7 +59,7 @@ println("Data generated with parameters: ", p_true)
     _prob = remake(prob; p = p)
     _sol = solve(_prob, SRIW1(); saveat = t)
 
-    for i = 1:length(t)
+    for i in 1:length(t)
         data[:, i] ~ MvNormal(_sol[:, i], sigma^2 * I)
     end
 end
@@ -81,7 +81,7 @@ function neg_log_likelihood(p, _)
     _prob = remake(prob; p = p)
     _sol = solve(_prob, SRIW1(); saveat = t_data)
     ll = 0.0
-    for i = 1:length(t_data)
+    for i in 1:length(t_data)
         ll += logpdf(MvNormal(_sol[:, i], p[5]^2 * I), data[:, i])
     end
     return -ll
@@ -111,9 +111,9 @@ println(
             mean(chain[:b]),
             mean(chain[:c]),
             mean(chain[:d]),
-            mean(chain[:sigma]),
+            mean(chain[:sigma])
         ],
-        digits = 4,
-    ),
+        digits = 4
+    )
 )
 println("  MLE estimate:        ", round.(opt_result.u, digits = 4))

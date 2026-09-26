@@ -35,8 +35,9 @@ struct ObservationSpec
     end
 end
 
-ObservationSpec(likelihood::Symbol; observed::Vector{Int} = Int[], scale::Real = 1.0) =
+function ObservationSpec(likelihood::Symbol; observed::Vector{Int} = Int[], scale::Real = 1.0)
     ObservationSpec(likelihood, observed, scale)
+end
 
 """
     bayesian_model(prob, t, data; theta_priors, likelihood = :gaussian,
@@ -62,14 +63,14 @@ SciML problem `prob` from observations `data` at times `t`.
 A `DynamicPPL.Model` ready for `sample` or `maximum_a_posteriori`.
 """
 function bayesian_model(
-    prob::SciMLBase.AbstractDEProblem,
-    t,
-    data;
-    theta_priors::Vector{<:Distribution},
-    likelihood::Symbol = :gaussian,
-    sigma_prior::Distribution = truncated(Normal(0, 1); lower = 1e-4),
-    u0_priors = nothing,
-    scale::Real = 1.0,
+        prob::SciMLBase.AbstractDEProblem,
+        t,
+        data;
+        theta_priors::Vector{<:Distribution},
+        likelihood::Symbol = :gaussian,
+        sigma_prior::Distribution = truncated(Normal(0, 1); lower = 1e-4),
+        u0_priors = nothing,
+        scale::Real = 1.0
 )
     u0_priors !== nothing && length(u0_priors) == length(prob.u0) ||
         u0_priors === nothing ||
@@ -96,13 +97,13 @@ function _default_solver(prob)
 end
 
 @model function _fit_de(
-    prob,
-    t,
-    data,
-    theta_priors,
-    sigma_prior,
-    spec::ObservationSpec,
-    u0_priors,
+        prob,
+        t,
+        data,
+        theta_priors,
+        sigma_prior,
+        spec::ObservationSpec,
+        u0_priors
 )
     theta ~ product_distribution(theta_priors)
     sigma ~ sigma_prior
@@ -119,7 +120,7 @@ end
         saveat = t,
         save_idxs = spec.observed,
         abstol = 1e-8,
-        reltol = 1e-6,
+        reltol = 1e-6
     )
     if !SciMLBase.successful_retcode(sol)
         # Integrator failure: reject by returning -Inf density contribution.

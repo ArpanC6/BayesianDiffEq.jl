@@ -25,14 +25,14 @@ methods should be compared against.
 Returns `(theta_hat, retcode)`.
 """
 function optimization_fit(
-    prob,
-    t,
-    data;
-    theta0::AbstractVector{<:Real},
-    lb = nothing,
-    ub = nothing,
-    solver = Tsit5(),
-    observed = nothing,
+        prob,
+        t,
+        data;
+        theta0::AbstractVector{<:Real},
+        lb = nothing,
+        ub = nothing,
+        solver = Tsit5(),
+        observed = nothing
 )
     function resid(theta, _)
         p = remake(prob; p = theta)
@@ -50,7 +50,7 @@ function optimization_fit(
     end
     fopt = OptimizationFunction(
         (r, p) -> sum(abs2, resid(r, p)),
-        Optimization.AutoForwardDiff(),
+        Optimization.AutoForwardDiff()
     )
     probopt = Optimization.OptimizationProblem(fopt, collect(theta0); lb = lb, ub = ub)
     sol = Optimization.solve(probopt, OptimizationOptimJL.LBFGS())
@@ -82,6 +82,6 @@ function compare_bayes_vs_optimization(chain, theta_hat, theta_true; alpha::Real
         bayes_error = pmean .- theta_true,
         opt_error = collect(theta_hat) .- theta_true,
         covered = covered,
-        alpha = alpha,
+        alpha = alpha
     )
 end

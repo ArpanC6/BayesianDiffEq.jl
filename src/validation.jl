@@ -26,7 +26,7 @@ Returns a matrix of ranks, size `(n_params, n_rep)`.
 """
 function sbc(model_generator::Function, n_rep::Int; sampler = NUTS(), n_samples = 500)
     ranks = nothing
-    for rep = 1:n_rep
+    for rep in 1:n_rep
         model, theta_true, _ = model_generator()
         chain = sample(model, sampler, n_samples; progress = false)
         draws = Matrix(Array(chain)')   # n_params x n_samples
@@ -70,15 +70,14 @@ solutions, one per column of `theta_draws` (size `n_params x n_samples`),
 which can be plotted against the data as a posterior predictive check.
 """
 function posterior_predictive(
-    prob,
-    t,
-    theta_draws::AbstractMatrix;
-    solver = Tsit5(),
-    kwargs...,
+        prob,
+        t,
+        theta_draws::AbstractMatrix;
+        solver = Tsit5(),
+        kwargs...
 )
     n_samples = size(theta_draws, 2)
-    return [
-        solve(remake(prob; p = theta_draws[:, k]), solver; saveat = t, kwargs...) for
-        k = 1:n_samples
-    ]
+    return [solve(remake(prob; p = theta_draws[:, k]), solver; saveat = t, kwargs...)
+            for
+            k in 1:n_samples]
 end
