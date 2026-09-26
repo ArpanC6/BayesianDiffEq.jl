@@ -1,4 +1,4 @@
-﻿using Documenter
+using Documenter
 using BayesianDiffEq
 
 makedocs(;
@@ -20,5 +20,5 @@ deploydocs(;
     repo = "github.com/ArpanC6/BayesianDiffEq.jl",
     devbranch = "main",
     push_preview = false,
-    forcepush = true,
+    forcepush = true
 )
