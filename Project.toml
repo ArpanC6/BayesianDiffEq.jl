@@ -1,10 +1,11 @@
 name = "BayesianDiffEq"
-uuid = "8f5b7a1c-4e2a-4f3b-9c8d-5b6a7d8e9f01"
-version = "0.1.1"
+uuid = "bde83fcd-44ea-4ad3-b1a3-d3e6e203c711"
+version = "0.1.2"
 authors = ["Arpan Chakraborty <chakrabortyarpan151@gmail.com>"]
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+DynamicPPL = "366bfd00-2699-11ea-058f-f148b4cae6d8"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Optimization = "7f7a1694-90dd-40f0-9382-eb1efda571ba"
 OptimizationOptimJL = "36348300-93cb-4f02-beb5-3c3902f8871e"
@@ -18,14 +19,15 @@ Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [compat]
 Distributions = "0.25"
-Optimization = "4"
+DynamicPPL = "0.42.14"
+Optimization = "5"
 OptimizationOptimJL = "0.4"
 OrdinaryDiffEq = "6"
 Reexport = "1"
 SciMLBase = "2"
 StatsBase = "0.34"
 StochasticDiffEq = "6"
-Turing = "0.35"
+Turing = "0.49"
 julia = "1.10"
 
 [extras]

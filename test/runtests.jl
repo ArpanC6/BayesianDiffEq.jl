@@ -1,5 +1,6 @@
 using Test
 using BayesianDiffEq
+using DynamicPPL
 using Random
 using Distributions
 
