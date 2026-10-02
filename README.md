@@ -4,19 +4,20 @@
 [![Format check](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/FormatCheck.yml/badge.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/actions/workflows/FormatCheck.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docs](https://img.shields.io/badge/docs-live-blue.svg)](https://arpanc6.github.io/BayesianDiffEq.jl/dev/)
-[![Release](https://img.shields.io/badge/release-v0.1.0-blue.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/releases/tag/v0.1.0)
+[![Release](https://img.shields.io/badge/release-v0.1.2-blue.svg)](https://github.com/ArpanC6/BayesianDiffEq.jl/releases/tag/v0.1.2)
 
 
-Modern, well-tested Bayesian parameter estimation for
+Bayesian parameter estimation for
 [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl)
 models, built directly on [Turing.jl](https://github.com/TuringLang/Turing.jl).
 
-BayesianDiffEq.jl is the modern replacement for the legacy
-[DiffEqBayes.jl](https://github.com/SciML/DiffEqBayes.jl) workflow. Turing
-and DifferentialEquations are fully composable, and this package builds on
-that composition with the pieces a real analysis needs: realistic
-observation models, reliable initialization, hierarchical structure, and
-rigorous posterior validation.
+BayesianDiffEq.jl extends the
+[DiffEqBayes.jl](https://github.com/SciML/DiffEqBayes.jl) workflow with
+SDE support, MAP initialization utilities, and count-data likelihoods.
+Turing and DifferentialEquations are fully composable, and this package
+builds on that composition with the pieces that applied analyses tend to
+need: realistic observation models, reliable initialization, hierarchical
+structure, and posterior validation utilities.
 
 ## Why this package exists
 
@@ -32,9 +33,9 @@ to work on realistic data is not:
   pharmacokinetics). Observation indices are a first-class argument.
 - **Unknown initial conditions and noise scale.** Both can be treated as
   unknown parameters with priors.
-- **Initialization.** Naively composed ODE-plus-Turing models routinely
-  produce dozens of divergent transitions on simple problems. The MAP
-  initialization utilities in this package remove that failure mode.
+- **Initialization.** Naively composed ODE-plus-Turing models can produce
+  divergent transitions on simple problems. The MAP initialization
+  utilities in this package address that failure mode.
 - **Populations.** Real studies observe many related subjects.
   `hierarchical_model` fits partial-pooling models with a non-centered
   parameterization.
@@ -75,7 +76,7 @@ init = map_initialization(model)
 chain = sample(model, NUTS(), 500; init_params = init)
 ```
 
-See `examples/` for complete, heavily commented analyses:
+See `examples/` for complete, commented analyses:
 
 | Example | Contents |
 |---|---|
@@ -86,10 +87,10 @@ See `examples/` for complete, heavily commented analyses:
 ## SDE pseudo-likelihood: an open research question
 
 Bayesian inference for discretely observed SDEs is an active research
-problem. This package provides the ingredients for a rigorous comparison
-of pseudo-likelihood and optimization-based approaches - the
+problem. This package provides the ingredients for a comparison of
+pseudo-likelihood and optimization-based approaches — the
 Euler-Maruyama pseudo-likelihood, truncated Brownian expansions, and
-side-by-side bias and coverage studies - so that the question of when
+side-by-side bias and coverage studies — so that the question of when
 pseudo-likelihood estimates are biased can be answered reproducibly. The
 experimental design is in `benchmarks/sde_bias_study.md`.
 
@@ -128,21 +129,13 @@ Full documentation is available at:
 
 ## Related packages
 
-- [DiffEqBayes.jl](https://github.com/SciML/DiffEqBayes.jl): the legacy
-  interface, whose `turing_inference` workflow this package supersedes.
+- [DiffEqBayes.jl](https://github.com/SciML/DiffEqBayes.jl): the existing
+  ODE-focused interface, which this package builds on.
 - [DiffEqParamEstim.jl](https://github.com/SciML/DiffEqParamEstim.jl):
   optimization-based parameter estimation, used here as the comparison
   baseline.
 - [Turing.jl](https://github.com/TuringLang/Turing.jl): the probabilistic
   programming language this package is built on.
-
-## Roadmap
-
-The twelve-month development plan is in [ROADMAP.md](ROADMAP.md). Phase 1
-(months 1 - 2) delivers the ODE workflow end to end, Phase 2 (months 3 - 5)
-delivers the SDE pseudo-likelihood comparison studies, Phase 3 (months
-6 - 8) delivers hierarchical models and real-data benchmarks; Phase 4
-(months 9 - 12) delivers the JuliaCon/JOSS paper.
 
 ## Contributing
 

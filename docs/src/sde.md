@@ -1,7 +1,16 @@
-# SDE pseudo-likelihood
+\# SDE pseudo-likelihood
+
+
 
 ```@docs
-loglikelihood_em
-sde_brownian_expansion
-optimization_fit
-compare_bayes_vs_optimization
+
+loglikelihood\_em
+
+sde\_brownian\_expansion
+
+optimization\_fit
+
+compare\_bayes\_vs\_optimization
+
+```
+

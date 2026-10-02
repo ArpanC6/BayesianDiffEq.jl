@@ -1,4 +1,12 @@
-# Observation models
+\# Observation models
+
+
 
 ```@docs
-bayesian_model
+
+ObservationSpec
+
+bayesian\_model
+
+```
+
